@@ -1,26 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+  
+import React from 'react'
+import { Nav } from 'react-bootstrap'
+import styled from '@emotion/styled'
+
+const Container = styled.div`
+  width: 1000px;
+  margin: 0 auto;
+`
+const InterBar = styled.div`
+  height: 30px;
+  background: #aec;
+`
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+      <Container>
+        <InterBar />
+      </Container>
+    </>
+  )
 }
 
-export default App;
+export default App
