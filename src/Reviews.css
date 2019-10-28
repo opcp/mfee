@@ -8,16 +8,16 @@
     font-size: 12px;
     margin: 4px 2px;
     cursor: pointer;
-    border-radius: 3px;
+    border-radius: 4px;
     border: 1px solid #ccc;
     line-height: 15px;
 }
 
-.btn:hover {
+.btn:hover{
     background: #CDE2D0;
 }
 
-.btn:focus {
+.btn:focus{
     background: #2D3A3A;
     color: white;
 }
