@@ -1,23 +1,33 @@
 .btn {
-    background: #fff;
-    width: 80px;
-    height: 30px;
-    color: black;
-    text-align: center;
-    text-decoration: none;
-    font-size: 12px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    line-height: 15px;
+  background: #fff;
+  width: 80px;
+  height: 30px;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  line-height: 15px;
 }
 
-.btn:hover{
-    background: #CDE2D0;
+.btn:hover {
+  background: #cde2d0;
 }
 
-.btn:focus{
-    background: #2D3A3A;
-    color: white;
+.btn:focus {
+  background: #2d3a3a;
+  color: white;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.paginationNum {
+  margin: 0 10px;
+  font-size: 20px;
 }
