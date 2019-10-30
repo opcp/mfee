@@ -15,7 +15,7 @@ import Game from '../../pages/Game'
 import Logout from '../../pages/Logout'
 import Cart from '../../pages/Cart'
 import NoPage from '../../pages/nopage/NoPage'
-import ReviewsList from '../../pages/BookReview/ReviewsList'
+import List from '../../pages/BookReview/List'
 
 
 import './header.css'
@@ -220,7 +220,7 @@ export default class Header extends React.Component {
                         <Route exact path="/game" component={Game} />
                         <Route exact path="/logout" component={Logout} />
                         <Route exact path="/cart" component={Cart} />
-                        <Route exact path="/list" component={ReviewsList} />
+                        <Route exact path="/list" component={List} />
                         <Route exact component={NoPage} />
                     </Switch>
                 </Router>

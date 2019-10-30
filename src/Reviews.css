@@ -1,11 +1,12 @@
+/* /reviews  書評首頁 */
 .btn {
   background: #fff;
-  width: 150px;
-  height: 56px;
+  width: 100px;
+  height: 40px;
   color: black;
   text-align: center;
   text-decoration: none;
-  font-size: 24px;
+  font-size: 15px;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 4px;
@@ -32,3 +33,5 @@
   margin: 0 10px;
   font-size: 20px;
 }
+
+/*  /list  進入單本書籍後 書評頁面 */

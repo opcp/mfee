@@ -1,18 +1,19 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
+import axios from 'axios'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
-
 import '../Reviews.css'
 
+// ------------------------------------------------------------------------------------
 //主要內容外框
 const Main = styled.section`
   margin: 0 auto;
-  width: 1280px;
+  width: 1200px;
 `
 //類別欄外框
 const CategoryBar = styled.div`
   display: flex;
-  justify-content: center;
+  flex-wrap:wrap;
 `
 //右上排列方式欄位
 const OptionBar = styled.div`
@@ -35,39 +36,43 @@ const BookImage = styled.img`
   height: 250px;
 `
 //書本資訊
-const BookInfo = styled.img`
+const BookInfo = styled.div`
   width: 800px;
   height: 250px;
+  border: 1px solid #ccc;
 `
 //書本星數
-const BookStar = styled.img`
+const BookStar = styled.div`
   width: 400px;
   height: 250px;
+  border: 1px solid #ccc;
 `
+// ------------------------------------------------------------------------------------
+
 const Reviewer = () => {
+  const [category, setCategory] = useState([])
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:4000/reviews')
+      .then(res => {
+        setCategory(res.data.data)
+        console.log(res.data.data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }, [])
+
   return (
     <>
       <Router>
         <Main>
           <CategoryBar>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
-          </CategoryBar>
-          <CategoryBar>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
-            <button className="btn">文學小說</button>
+            {/* {category.map(data => (
+              <button className="btn">{data.name}</button>
+            ))} */}
+            {JSON.stringify(category)}
           </CategoryBar>
           <OptionBar>
             <select name="array">
@@ -116,7 +121,7 @@ const Reviewer = () => {
         </Main>
 
         <Switch>
-          <Route  path="http://localhost:3000/list/" />
+          <Route path="http://localhost:3000/list/" />
         </Switch>
       </Router>
     </>
