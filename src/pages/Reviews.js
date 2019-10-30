@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from '@emotion/styled'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
-import ReviewsList from './BookReview/ReviewsList'
+
 import '../Reviews.css'
 
 //主要內容外框
@@ -116,7 +116,7 @@ const Reviewer = () => {
         </Main>
 
         <Switch>
-          <Route exact path="/List" component={ReviewsList} />
+          <Route  path="http://localhost:3000/list/" />
         </Switch>
       </Router>
     </>

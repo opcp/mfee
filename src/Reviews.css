@@ -1,11 +1,11 @@
 .btn {
   background: #fff;
-  width: 80px;
-  height: 30px;
+  width: 150px;
+  height: 56px;
   color: black;
   text-align: center;
   text-decoration: none;
-  font-size: 12px;
+  font-size: 24px;
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 4px;
@@ -15,11 +15,12 @@
 
 .btn:hover {
   background: #cde2d0;
+  color: #2d3a3a;
 }
 
 .btn:focus {
   background: #2d3a3a;
-  color: white;
+  color: #ffc408;
 }
 
 .pagination {
