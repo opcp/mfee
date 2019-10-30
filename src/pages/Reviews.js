@@ -50,82 +50,80 @@ const BookStar = styled.div`
 // ------------------------------------------------------------------------------------
 
 const Reviewer = () => {
-  const [category, setCategory] = useState([])
 
-  useEffect(() => {
-    axios
-      .get('http://localhost:4000/reviews')
-      .then(res => {
-        setCategory(res.data.data)
-        console.log(res.data.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }, [])
+    const [category, setCategory] = useState([])
+    const [bookinfo, setbookinfo] = useState([])
 
-  return (
-    <>
-      <Router>
-        <Main>
-          <CategoryBar>
-            {/* {category.map(data => (
-              <button className="btn">{data.name}</button>
-            ))} */}
-            {JSON.stringify(category)}
-          </CategoryBar>
-          <OptionBar>
-            <select name="array">
-              <option value="1">討論度(高>低)</option>
-              <option value="2">上市日期(新>舊)</option>
-              <option value="2">暢銷度</option>
-            </select>
-          </OptionBar>
-          <Link to="/List">
-            <Book>
-              <BookImage />
-              <BookInfo />
-              <BookStar />
-            </Book>
-          </Link>
-          <Book>
-            <BookImage />
-            <BookInfo />
-            <BookStar />
-          </Book>
-          <Book>
-            <BookImage />
-            <BookInfo />
-            <BookStar />
-          </Book>
-          <Book>
-            <BookImage />
-            <BookInfo />
-            <BookStar />
-          </Book>
-          <Book>
-            <BookImage />
-            <BookInfo />
-            <BookStar />
-          </Book>
-          <ul className="pagination">
-            <li className="paginationNum">1</li>
-            <li className="paginationNum">2</li>
-            <li className="paginationNum">3</li>
-            <li className="paginationNum">4</li>
-            <li className="paginationNum">5</li>
-            <li className="paginationNum">6</li>
-            <li className="paginationNum">7</li>
-            <li className="paginationNum">8</li>
-          </ul>
-        </Main>
+    useEffect(() => {
+        categoryBar()
+        bookInfo()
+    }, [])
 
-        <Switch>
-          <Route path="http://localhost:3000/list/" />
-        </Switch>
-      </Router>
-    </>
-  )
+
+    const categoryBar = () => {
+        axios
+            .post('http://localhost:4000/categoryBar')
+            .then(res => {
+                setCategory(res.data.data)
+                console.log(res.data.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    const bookInfo = () => {
+        axios.post('http://localhost:4000/bookInfo')
+            .then(res => {
+                setbookinfo(res.data.data)
+                console.log(res.data.data)
+            })
+            .catch(error => {
+                console.log(error)
+            })
+    }
+
+    return (
+        <>
+            <Router>
+                <Main>
+                    <CategoryBar>
+                        {category.map(data => (
+                            <button className="btn">{data.name}</button>
+                        ))}
+                    </CategoryBar>
+                    <OptionBar>
+                        <select name="array">
+                            <option value="1">討論度(高>低)</option>
+                            <option value="2">上市日期(新>舊)</option>
+                            <option value="2">暢銷度</option>
+                        </select>
+                    </OptionBar>
+                        <Book>
+                            <BookImage />
+                            <BookInfo>{bookinfo.map(data => (
+                                <div>{data.introduction}</div>
+                            ))}</BookInfo>
+                            <BookStar />
+                        </Book>
+                    <ul className="pagination">
+                        <li className="paginationNum">1</li>
+                        <li className="paginationNum">2</li>
+                        <li className="paginationNum">3</li>
+                        <li className="paginationNum">4</li>
+                        <li className="paginationNum">5</li>
+                        <li className="paginationNum">6</li>
+                        <li className="paginationNum">7</li>
+                        <li className="paginationNum">8</li>
+                    </ul>
+                </Main>
+
+                <Switch>
+                    <Route path="http://localhost:3000/list/" />
+                </Switch>
+            </Router>
+        </>
+    )
 }
 
 export default Reviewer
