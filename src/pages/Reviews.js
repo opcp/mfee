@@ -22,22 +22,25 @@ const OptionBar = styled.div`
 `
 
 // 書本外框
-const Book = styled.div`
+const Book = styled.section`
   display: flex;
   margin: 5px 0;
-  justify-content: center;
   align-items: center;
   flex-grow: 1;
+`
+const BookColumn = styled.div`
+  display: flex;
   flex-direction: column;
 `
+
 //書本圖片
 const BookImage = styled.div`
   margin: 0 auto;
 `
 //書本資訊
 const BookInfo = styled.div`
-  width: 700px;
-  margin: 0 0 40px 0;
+  width: 500px;
+  margin: 0 0 40px 40px;
   ${'' /* overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -85,7 +88,6 @@ const Reviewer = () => {
         console.log(error)
       })
   }
-  console.log(bookinfo)
   // category.filter()
 
   return (
@@ -107,32 +109,34 @@ const Reviewer = () => {
             </select>
           </OptionBar>
           <Book>
-            {/* {bookinfo.map(data => {
-              <img src={require('./BookReview/images/{data.pic}')}></img>
-            })} */}
-
-            {bookinfo.map(data => (
-              <BookInfo key={data.sid}>
-                <h3 dangerouslySetInnerHTML={{ __html: data.name }}></h3>
-                {'作者:'}<div dangerouslySetInnerHTML={{ __html: data.author }}></div>
-                <br />
-                <br />
-                {'內容簡介:'}
-                <div>
-                  {data.detailData}
-                </div>
-              </BookInfo>
-            ))}
+            <BookColumn>
+              {bookinfo.map(data => (
+                <BookImage>
+                  <img className='img' src={require('./BookReview/images/' + data.pic)}></img>
+                </BookImage>
+              ))}
+            </BookColumn>
+            <BookColumn>
+              {bookinfo.map(data => (
+                <BookInfo key={data.sid}>
+                  <h3> {data.name}</h3>
+                  {'作者:'}
+                  <div>{data.author}</div>
+                  <br />
+                  <br />
+                  {'內容簡介:'}
+                  {/* <div>
+                  {(data.detailData).replace(/<[^>]*>/, '')}
+                </div> */}
+                </BookInfo>
+              ))}
+            </BookColumn>
             {/* <BookStar /> */}
           </Book>
           <ul className="pagination">
             <li className="paginationNum">1</li>
           </ul>
         </Main>
-
-        <Switch>
-          <Route path="http://localhost:3000/List/" />
-        </Switch>
       </Router>
     </>
   )
