@@ -34,4 +34,24 @@
   font-size: 20px;
 }
 
+.img {
+  max-height: 100%;
+  max-width: 100%;
+  width: 150px;
+  height: 150px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  border: 1px solid #000;
+}
+
+.hide {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 /*  /list  進入單本書籍後 書評頁面 */
