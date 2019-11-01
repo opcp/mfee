@@ -1,3 +1,7 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import axios from 'axios'
@@ -26,7 +30,6 @@ const Book = styled.section`
   display: flex;
   margin: 5px 0;
   align-items: center;
-  flex-grow: 1;
 `
 const BookColumn = styled.div`
   display: flex;
@@ -38,15 +41,15 @@ const BookImage = styled.div`
   margin: 0 auto;
 `
 //書本資訊
-const BookInfo = styled.div`
-  width: 500px;
-  margin: 0 0 40px 40px;
-  ${'' /* overflow: hidden;
-  white-space: nowrap;
+const BookInfo = styled.text`
+  width: 850px;
+  margin: 0 0 40px 2rem;
+  overflow: hidden;
+  white-space: wrap;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical; */}
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 `
 //書本星數
 const BookStar = styled.div`
@@ -57,13 +60,16 @@ const BookStar = styled.div`
 // ------------------------------------------------------------------------------------
 
 const Reviewer = () => {
-  const [category, setCategory] = useState([])
-  const [bookinfo, setbookinfo] = useState([])
+  const [category, setCategory] = useState([]) //分類資料
+  const [bookinfo, setbookinfo] = useState([]) //書籍資料
+  const [page, setPage] = useState(1)
+  const [pagination, setPagination] = useState([]) //分頁數
+  let pagNum = [] //分頁
 
   useEffect(() => {
     categoryBar()
     bookInfo()
-  }, [])
+  }, [page])
 
   const categoryBar = () => {
     axios
@@ -79,14 +85,33 @@ const Reviewer = () => {
 
   const bookInfo = () => {
     axios
-      .get('http://localhost:4000/bookInfo')
+      .get(`http://localhost:4000/bookInfo/${page}`)
       .then(res => {
         setbookinfo(res.data.rows)
-        console.log(res)
+        setPagination(res.data.total)
+        console.log(res.data)
       })
       .catch(error => {
         console.log(error)
       })
+  }
+
+  const goPage = () => {}
+
+  //分頁陣列
+  for (let i = 1; i <= Math.ceil(pagination / 10); i++) {
+    pagNum.push(
+      <li className="paginationNum">
+        <a
+          href="#"
+          onClick={() => {
+            goPage(i)
+          }}
+        >
+          {i}
+        </a>
+      </li>
+    )
   }
   // category.filter()
 
@@ -110,31 +135,59 @@ const Reviewer = () => {
           </OptionBar>
           <Book>
             <BookColumn>
-              {bookinfo.map(data => (
+              {bookinfo.map((data, index) => (
                 <BookImage>
-                  <img className='img' src={require('./BookReview/images/' + data.pic)}></img>
+                  <img
+                    key={index}
+                    className="img"
+                    src={require('./BookReview/images/' + data.pic)}
+                  ></img>
                 </BookImage>
               ))}
             </BookColumn>
             <BookColumn>
               {bookinfo.map(data => (
                 <BookInfo key={data.sid}>
-                  <h3> {data.name}</h3>
+                  <h4> {data.name}</h4>
                   {'作者:'}
-                  <div>{data.author}</div>
-                  <br />
+                  {data.author}
+                  {/* {'出版社:'}
+                  {data.publish_date} */}
+                  <div />
                   <br />
                   {'內容簡介:'}
-                  {/* <div>
-                  {(data.detailData).replace(/<[^>]*>/, '')}
-                </div> */}
+                  <div>
+                    {data.introduction
+                      .replace(/<[^>]*>/g, '')
+                      .replace(/&nbsp;/g, '')
+                      .replace(/&hellip;/g, '')
+                      .replace(/&bull;/g, '')}
+                  </div>
                 </BookInfo>
               ))}
             </BookColumn>
             {/* <BookStar /> */}
           </Book>
           <ul className="pagination">
-            <li className="paginationNum">1</li>
+            <button
+              onClick={() => {
+                if (page > 1) {
+                  setPage(page - 1)
+                }
+              }}
+            >
+              1
+            </button>
+            {pagNum}
+            <button
+              onClick={() => {
+                if (page < pagination) {
+                  setPage(page + 1)
+                }
+              }}
+            >
+              >
+            </button>
           </ul>
         </Main>
       </Router>
