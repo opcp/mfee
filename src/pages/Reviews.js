@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-has-content */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
@@ -41,7 +42,7 @@ const BookImage = styled.div`
   margin: 0 auto;
 `
 //書本資訊
-const BookInfo = styled.text`
+const BookInfo = styled.div`
   width: 850px;
   margin: 0 0 40px 2rem;
   overflow: hidden;
@@ -71,9 +72,10 @@ const Reviewer = () => {
     bookInfo()
   }, [page])
 
+  //書籍分類ajax
   const categoryBar = () => {
     axios
-      .post('http://localhost:4000/categoryBar')
+      .post('http://localhost:5555/categoryBar')
       .then(res => {
         setCategory(res.data.data)
         console.log(res.data.data)
@@ -83,12 +85,13 @@ const Reviewer = () => {
       })
   }
 
+  //書籍資料ajax
   const bookInfo = () => {
     axios
-      .get(`http://localhost:4000/bookInfo/${page}`)
+      .get(`http://localhost:5555/bookInfo/${page}`)
       .then(res => {
         setbookinfo(res.data.rows)
-        setPagination(res.data.total)
+        setPagination(Math.ceil(res.data.total) / 10)
         console.log(res.data)
       })
       .catch(error => {
@@ -99,19 +102,8 @@ const Reviewer = () => {
   const goPage = () => {}
 
   //分頁陣列
-  for (let i = 1; i <= Math.ceil(pagination / 10); i++) {
-    pagNum.push(
-      <li className="paginationNum">
-        <a
-          href="#"
-          onClick={() => {
-            goPage(i)
-          }}
-        >
-          {i}
-        </a>
-      </li>
-    )
+  for (let i = 1; i <= pagination; i++) {
+    pagNum.push(<li className="paginationNum">{i}</li>)
   }
   // category.filter()
 
@@ -137,18 +129,25 @@ const Reviewer = () => {
             <BookColumn>
               {bookinfo.map((data, index) => (
                 <BookImage>
-                  <img
-                    key={index}
-                    className="img"
-                    src={require('./BookReview/images/' + data.pic)}
-                  ></img>
+                  <a href={'http://localhost:3000/list/' + data.sid}>
+                    <img
+                      key={index}
+                      className="img"
+                      src={require('./BookReview/images/' + data.pic)}
+                    />
+                  </a>
                 </BookImage>
               ))}
             </BookColumn>
             <BookColumn>
               {bookinfo.map(data => (
                 <BookInfo key={data.sid}>
-                  <h4> {data.name}</h4>
+                  <a
+                    className="list_sid"
+                    href={'http://localhost:3000/list/' + data.sid}
+                  >
+                    <h4> {data.name}</h4>
+                  </a>
                   {'作者:'}
                   {data.author}
                   {/* {'出版社:'}
@@ -181,9 +180,10 @@ const Reviewer = () => {
             {pagNum}
             <button
               onClick={() => {
-                if (page < pagination) {
-                  setPage(page + 1)
-                }
+                page < pagination ? setPage(page + 1) : setPage((page = 1))
+                // if (page < pagination) {
+                //   setPage(page + 1)
+                // }
               }}
             >
               >

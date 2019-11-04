@@ -47,10 +47,12 @@
   border: 1px solid #000;
 }
 
-.hide {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+/* 文字超連結A標籤 效果 */
+.list_sid {
+  color: #2d3a3a;
+}
+.list_sid:hover {
+  color: #ffc408;
 }
 
 /*  /list  進入單本書籍後 書評頁面 */
