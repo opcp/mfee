@@ -44,7 +44,16 @@
   width: 150px;
   height: 174px;
   margin: 0 0 45px 0;
-  border: 1px solid #000;
+  border: 1px solid #ccc;
+}
+
+.list_img {
+  max-height: 100%;
+  max-width: 100%;
+  width: 150px;
+  height: 150px;
+  margin: 0 0 0 0;
+  border: 1px solid #ccc;
 }
 
 /* 文字超連結A標籤 效果 */

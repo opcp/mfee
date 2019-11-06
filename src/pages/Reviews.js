@@ -32,6 +32,7 @@ const Book = styled.section`
   margin: 5px 0;
   align-items: center;
 `
+//直排
 const BookColumn = styled.div`
   display: flex;
   flex-direction: column;
@@ -65,6 +66,10 @@ const Reviewer = () => {
   const [bookinfo, setbookinfo] = useState([]) //書籍資料
   const [page, setPage] = useState(1)
   const [pagination, setPagination] = useState([]) //分頁數
+  const [array, setArray] = useState() //排序方式
+  console.log(array)
+  const urlParams = window.location.pathname.replace('/reviews/', '')
+  console.log(urlParams)
   let pagNum = [] //分頁
 
   useEffect(() => {
@@ -77,8 +82,8 @@ const Reviewer = () => {
     axios
       .post('http://localhost:5555/categoryBar')
       .then(res => {
-        setCategory(res.data.data)
-        console.log(res.data.data)
+        let data = res.data.data
+        setCategory(data)
       })
       .catch(error => {
         console.log(error)
@@ -86,9 +91,10 @@ const Reviewer = () => {
   }
 
   //書籍資料ajax
-  const bookInfo = () => {
+  const bookInfo = e => {
+    let arr = e
     axios
-      .get(`http://localhost:5555/bookInfo/${page}`)
+      .get(`http://localhost:5555/reviews/${urlParams}/${arr}/?page`)
       .then(res => {
         setbookinfo(res.data.rows)
         setPagination(Math.ceil(res.data.total) / 10)
@@ -99,43 +105,61 @@ const Reviewer = () => {
       })
   }
 
-  const goPage = () => {}
-
   //分頁陣列
   for (let i = 1; i <= pagination; i++) {
     pagNum.push(<li className="paginationNum">{i}</li>)
   }
   // category.filter()
 
+  function goPage(s) {
+    let arr = s
+    window.location.href = `http://localhost:3000/reviews/${arr}`
+  }
+
   return (
     <>
       <Router>
         <Main>
           <CategoryBar>
-            {category.map(data => (
-              <button key={data.sid} className="btn">
+            {category.map((data, index) => (
+              <button
+                value={data.sid}
+                onClick={s => {
+                  goPage(s.target.value)
+                }}
+                key={index}
+                className="btn"
+              >
                 {data.name}
               </button>
             ))}
           </CategoryBar>
           <OptionBar>
-            <select name="array">
+            <select
+              onChange={e => {
+                bookInfo(e.target.value)
+              }}
+              value={array}
+              name="array"
+            >
               <option value="1">討論度(高>低)</option>
               <option value="2">上市日期(新>舊)</option>
-              <option value="2">暢銷度</option>
+              <option value="3">暢銷度</option>
             </select>
           </OptionBar>
           <Book>
             <BookColumn>
               {bookinfo.map((data, index) => (
                 <BookImage>
-                  <a href={'http://localhost:3000/list/' + data.sid}>
+                  {/* <a href={'http://localhost:3000/list/' + data.sid}> */}
+                  <Link to={'/list/' + data.sid}>
                     <img
                       key={index}
                       className="img"
                       src={require('./BookReview/images/' + data.pic)}
                     />
-                  </a>
+                  </Link>
+                  {/* </a> */}
                 </BookImage>
               ))}
             </BookColumn>
@@ -180,7 +204,9 @@ const Reviewer = () => {
             {pagNum}
             <button
               onClick={() => {
-                page < pagination ? setPage(page + 1) : setPage((page = 1))
+                page <= pagination
+                  ? setPage(page + 1)
+                  : setPage((page = pagination))
                 // if (page < pagination) {
                 //   setPage(page + 1)
                 // }
@@ -190,6 +216,9 @@ const Reviewer = () => {
             </button>
           </ul>
         </Main>
+        <Switch>
+           <Route exact path="/list" />
+        </Switch>
       </Router>
     </>
   )

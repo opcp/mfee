@@ -8,7 +8,11 @@ import '../../Reviews.css'
 
 //---------------------------------------------------------------------------------------------------------
 
-//主頁面外框
+//主要內容外框
+const Main = styled.section`
+  margin: 0 auto;
+  width: 1200px;
+`
 
 // 書本外框
 const Book = styled.div`
@@ -16,23 +20,35 @@ const Book = styled.div`
   margin: 5px 0;
   justify-content: center;
   height: 300px;
-  align-items: center;
 `
+//直排
+const BookColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 //書本圖片
 const BookImage = styled.img`
-  width: 250px;
-  height: 250px;
+  margin: 0 auto;
+`
+//加入書櫃按鈕
+const BookCase = styled.button`
+  margin: 0 auto;
+  width: 80px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #cde2d0;
+  color: #2d3a3a;
+  border: 1px solid #ccc;
 `
 //書本資訊
 const BookInfo = styled.div`
-  width: 800px;
-  height: 250px;
-  border: 1px solid #ccc;
+  width: 700px;
 `
 //書本星數
 const BookStar = styled.div`
   display: flex;
-  width: 400px;
+  width: 250px;
   height: 250px;
   border: 1px solid #ccc;
   justify-content: center;
@@ -92,24 +108,50 @@ const List = () => {
   }
   return (
     <>
-      <Book>
-        {List.map(data => (
-          <h4>{data.sid}</h4>
+      <Main>
+        {List.map((data, index) => (
+          <Book key={index}>
+            <BookColumn>
+              <img
+                className="list_img"
+                key={data.sid}
+                src={require('./images/' + data.pic)}
+              />
+              <BookCase>加入書櫃</BookCase>
+              <BookCase>立即購買</BookCase>
+            </BookColumn>
+            <BookColumn>
+              <BookInfo>
+                <h4>{data.name}</h4>
+                {'作者:'}
+                {data.author}
+                <br />
+                <br />
+                <br />
+                {'內容簡介:'}
+                <div>
+                  {data.introduction
+                    .replace(/<[^>]*>/g, '')
+                    .replace(/&nbsp;/g, '')
+                    .replace(/&hellip;/g, '')
+                    .replace(/&bull;/g, '')}
+                </div>
+              </BookInfo>
+            </BookColumn>
+            <BookStar />
+          </Book>
         ))}
-        <BookImage></BookImage>
-        <BookInfo></BookInfo>
-        <BookStar />
-      </Book>
-      <Review>
-        <h3>發表評論</h3>
-        <Member />
-        <Text />
-        <Submit>送出評論</Submit>
-      </Review>
-      <Review>
-        <Member />
-        <Text />
-      </Review>
+        <Review>
+          <h3>發表評論</h3>
+          <Member />
+          <Text />
+          <Submit>送出評論</Submit>
+        </Review>
+        <Review>
+          <Member />
+          <Text />
+        </Review>
+      </Main>
     </>
   )
 }
