@@ -1,10 +1,11 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-restricted-globals */
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styled from '@emotion/styled'
-import '../../Reviews.css'
+import './Reviews.css'
 
 //---------------------------------------------------------------------------------------------------------
 
@@ -28,9 +29,9 @@ const BookColumn = styled.div`
 `
 
 //書本圖片
-const BookImage = styled.img`
-  margin: 0 auto;
-`
+// const BookImage = styled.img`
+//   margin: 0 auto;
+// `
 //加入書櫃按鈕
 const BookCase = styled.button`
   margin: 0 auto;

@@ -5,9 +5,10 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
-import axios from 'axios'
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
-import '../Reviews.css'
+import './BookReview/Reviews.css'
+
+import Category from './BookReview/Category'
+import Bookinfo from './BookReview/Bookinfo'
 
 // ------------------------------------------------------------------------------------
 //主要內容外框
@@ -15,95 +16,12 @@ const Main = styled.section`
   margin: 0 auto;
   width: 1200px;
 `
-//類別欄外框
-const CategoryBar = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`
-//右上排列方式欄位
-const OptionBar = styled.div`
-  display: flex;
-  flex-direction: row-reverse;
-`
 
-// 書本外框
-const Book = styled.section`
-  display: flex;
-  margin: 5px 0;
-  align-items: center;
-`
-//直排
-const BookColumn = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-
-//書本圖片
-const BookImage = styled.div`
-  margin: 0 auto;
-`
-//書本資訊
-const BookInfo = styled.div`
-  width: 850px;
-  margin: 0 0 40px 2rem;
-  overflow: hidden;
-  white-space: wrap;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-`
-//書本星數
-const BookStar = styled.div`
-  width: 350px;
-  height: 250px;
-  border: 1px solid #ccc;
-`
 // ------------------------------------------------------------------------------------
 
 const Reviewer = () => {
-  const [category, setCategory] = useState([]) //分類資料
-  const [bookinfo, setbookinfo] = useState([]) //書籍資料
-  const [page, setPage] = useState(1)
   const [pagination, setPagination] = useState([]) //分頁數
-  const [array, setArray] = useState() //排序方式
-  console.log(array)
-  const urlParams = window.location.pathname.replace('/reviews/', '')
-  console.log(urlParams)
   let pagNum = [] //分頁
-
-  useEffect(() => {
-    categoryBar()
-    bookInfo()
-  }, [page])
-
-  //書籍分類ajax
-  const categoryBar = () => {
-    axios
-      .post('http://localhost:5555/categoryBar')
-      .then(res => {
-        let data = res.data.data
-        setCategory(data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }
-
-  //書籍資料ajax
-  const bookInfo = e => {
-    let arr = e
-    axios
-      .get(`http://localhost:5555/reviews/${urlParams}/${arr}/?page`)
-      .then(res => {
-        setbookinfo(res.data.rows)
-        setPagination(Math.ceil(res.data.total) / 10)
-        console.log(res.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }
 
   //分頁陣列
   for (let i = 1; i <= pagination; i++) {
@@ -111,87 +29,12 @@ const Reviewer = () => {
   }
   // category.filter()
 
-  function goPage(s) {
-    let arr = s
-    window.location.href = `http://localhost:3000/reviews/${arr}`
-  }
-
   return (
     <>
-      <Router>
-        <Main>
-          <CategoryBar>
-            {category.map((data, index) => (
-              <button
-                value={data.sid}
-                onClick={s => {
-                  goPage(s.target.value)
-                }}
-                key={index}
-                className="btn"
-              >
-                {data.name}
-              </button>
-            ))}
-          </CategoryBar>
-          <OptionBar>
-            <select
-              onChange={e => {
-                bookInfo(e.target.value)
-              }}
-              value={array}
-              name="array"
-            >
-              <option value="1">討論度(高>低)</option>
-              <option value="2">上市日期(新>舊)</option>
-              <option value="3">暢銷度</option>
-            </select>
-          </OptionBar>
-          <Book>
-            <BookColumn>
-              {bookinfo.map((data, index) => (
-                <BookImage>
-                  {/* <a href={'http://localhost:3000/list/' + data.sid}> */}
-                  <Link to={'/list/' + data.sid}>
-                    <img
-                      key={index}
-                      className="img"
-                      src={require('./BookReview/images/' + data.pic)}
-                    />
-                  </Link>
-                  {/* </a> */}
-                </BookImage>
-              ))}
-            </BookColumn>
-            <BookColumn>
-              {bookinfo.map(data => (
-                <BookInfo key={data.sid}>
-                  <a
-                    className="list_sid"
-                    href={'http://localhost:3000/list/' + data.sid}
-                  >
-                    <h4> {data.name}</h4>
-                  </a>
-                  {'作者:'}
-                  {data.author}
-                  {/* {'出版社:'}
-                  {data.publish_date} */}
-                  <div />
-                  <br />
-                  {'內容簡介:'}
-                  <div>
-                    {data.introduction
-                      .replace(/<[^>]*>/g, '')
-                      .replace(/&nbsp;/g, '')
-                      .replace(/&hellip;/g, '')
-                      .replace(/&bull;/g, '')}
-                  </div>
-                </BookInfo>
-              ))}
-            </BookColumn>
-            {/* <BookStar /> */}
-          </Book>
-          <ul className="pagination">
+      <Main>
+        <Category />
+        <Bookinfo />
+        {/* <ul className="pagination">
             <button
               onClick={() => {
                 if (page > 1) {
@@ -207,19 +50,12 @@ const Reviewer = () => {
                 page <= pagination
                   ? setPage(page + 1)
                   : setPage((page = pagination))
-                // if (page < pagination) {
-                //   setPage(page + 1)
-                // }
               }}
             >
               >
             </button>
-          </ul>
-        </Main>
-        <Switch>
-           <Route exact path="/list" />
-        </Switch>
-      </Router>
+          </ul> */}
+      </Main>
     </>
   )
 }
