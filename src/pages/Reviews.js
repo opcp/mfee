@@ -7,7 +7,6 @@ import React, { useState, useEffect } from 'react'
 import styled from '@emotion/styled'
 import './BookReview/Reviews.css'
 
-import Category from './BookReview/Category'
 import Bookinfo from './BookReview/Bookinfo'
 
 // ------------------------------------------------------------------------------------
@@ -32,7 +31,6 @@ const Reviewer = () => {
   return (
     <>
       <Main>
-        <Category />
         <Bookinfo />
         {/* <ul className="pagination">
             <button

@@ -5,8 +5,8 @@ import './Reviews.css'
 
 function Category() {
   const [categorys, setCategorys] = useState([]) //分類資料
-  const urlParams = window.location.pathname.replace('/reviews/', '')
-
+  const urlParams = window.location.href
+  
   useEffect(() => {
     categoryBar()
   }, [])
@@ -29,8 +29,9 @@ function Category() {
   }
   //---------------------------------------------------------------------------------------------
   const goPage = s => {
-    let category = s
-    window.location.href = `http://localhost:3000/reviews/${category}`
+    let category = 'c' + '=' + s + '&'
+    // let s =window.location.href
+    window.location.href = 'http://localhost:3000/reviews/?'+category
   }
   return (
     <>

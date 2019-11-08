@@ -6,18 +6,26 @@ import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import styled from '@emotion/styled'
 import axios from 'axios'
+import Category from './Category'
+import './Reviews.css'
 
 function Bookinfo() {
-  const [bookinfo, setbookinfo] = useState([]) //書籍資料
-  const [array, setArray] = useState() //排序方式
-  const [Categorys, setCategorys] = useState()
+  const [bookInformation, setBookInformation] = useState([]) //書籍資料
+  const [array, setArray] = useState(1) //排序方式
+  const [categorys, setCategorys] = useState([])
+  const [c, setC] = useState(1)
 
-  const urlParams = window.location.pathname.replace('/reviews/', '')
+  const urlParams = window.location.search
 
   console.log(array)
   console.log(urlParams)
   // setCategorys(urlParams)
   //---------------------------------------------------------------------------
+  const CategoryBar = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+  `
+
   //右上排列方式欄位
   const OptionBar = styled.div`
     display: flex;
@@ -57,17 +65,31 @@ function Bookinfo() {
     height: 250px;
     border: 1px solid #ccc;
   `
+
   //---------------------------------------------------------------------
   useEffect(() => {
     bookInfo()
+    categoryBar()
   }, [])
+
+  const categoryBar = () => {
+    axios
+      .post('http://localhost:5555/categoryBar')
+      .then(res => {
+        let data = res.data.data
+        setCategorys(data)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 
   const bookInfo = e => {
     setArray(e)
     axios
-      .get(`http://localhost:5555/reviews/${urlParams}/${array}`)
+      .get(`http://localhost:5555/reviews/${urlParams}&a=${array}&`)
       .then(res => {
-        setbookinfo(res.data.rows)
+        setBookInformation(res.data.rows)
         console.log(res.data)
       })
       .catch(error => {
@@ -75,8 +97,21 @@ function Bookinfo() {
       })
   }
 
+  // const goPage = s => {
+  //   window.location.href = 'http://localhost:3000/reviews/?' + category
+  // }
+
   return (
     <>
+      <CategoryBar>
+        {categorys.map((data, index) => (
+          <Link to={'/reviews/?c=' + data.sid}>
+            <button value={data.sid} key={index} onClick={()=>{}} className="btn">
+              {data.name}
+            </button>
+          </Link>
+        ))}
+      </CategoryBar>
       <OptionBar>
         <select
           onChange={e => {
@@ -94,7 +129,7 @@ function Bookinfo() {
       </OptionBar>
       <Book>
         <BookColumn>
-          {bookinfo.map((data, index) => (
+          {bookInformation.map((data, index) => (
             <BookImage>
               <Link to={'/list/' + data.sid}>
                 <img
@@ -107,7 +142,7 @@ function Bookinfo() {
           ))}
         </BookColumn>
         <BookColumn>
-          {bookinfo.map(data => (
+          {bookInformation.map(data => (
             <BookInfo key={data.sid}>
               <Link className="list_sid" to={'/list/' + data.sid}>
                 <h4> {data.name}</h4>

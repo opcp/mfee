@@ -86,8 +86,8 @@ const Submit = styled.button`
 
 const List = () => {
   //從nodejs拿取資料的sid值
-  const urlParams = window.location.pathname.replace('/list/', '')
-
+  const urlParams = window.location
+  console.log(urlParams)
   //變數
   const [List, setList] = useState([])
 
