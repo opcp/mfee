@@ -6,19 +6,17 @@ import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import styled from '@emotion/styled'
 import axios from 'axios'
-import Category from './Category'
+import BookStar from './BookStar'
 import './Reviews.css'
-
 function Bookinfo() {
   const [bookInformation, setBookInformation] = useState([]) //書籍資料
   const [array, setArray] = useState(1) //排序方式
   const [categorys, setCategorys] = useState([])
-  const [c, setC] = useState(1)
+  const [cate, setC] = useState(1)
 
   const urlParams = window.location.search
 
   console.log(array)
-  console.log(urlParams)
   // setCategorys(urlParams)
   //---------------------------------------------------------------------------
   const CategoryBar = styled.div`
@@ -60,11 +58,11 @@ function Bookinfo() {
     -webkit-box-orient: vertical;
   `
   //書本星數
-  const BookStar = styled.div`
-    width: 350px;
-    height: 250px;
-    border: 1px solid #ccc;
-  `
+  // const BookStar = styled.div`
+  //   width: 350px;
+  //   height: 250px;
+  //   border: 1px solid #ccc;
+  // `
 
   //---------------------------------------------------------------------
   useEffect(() => {
@@ -78,6 +76,7 @@ function Bookinfo() {
       .then(res => {
         let data = res.data.data
         setCategorys(data)
+        setC(data.sid)
       })
       .catch(error => {
         console.log(error)
@@ -87,7 +86,7 @@ function Bookinfo() {
   const bookInfo = e => {
     setArray(e)
     axios
-      .get(`http://localhost:5555/reviews/${urlParams}&a=${array}&`)
+      .get(`http://localhost:5555/reviews/`)
       .then(res => {
         setBookInformation(res.data.rows)
         console.log(res.data)
@@ -105,11 +104,9 @@ function Bookinfo() {
     <>
       <CategoryBar>
         {categorys.map((data, index) => (
-          <Link to={'/reviews/?c=' + data.sid}>
-            <button value={data.sid} key={index} onClick={()=>{}} className="btn">
-              {data.name}
-            </button>
-          </Link>
+          <button value={data.sid} key={index} className="btn">
+            {data.name}
+          </button>
         ))}
       </CategoryBar>
       <OptionBar>
@@ -164,7 +161,7 @@ function Bookinfo() {
             </BookInfo>
           ))}
         </BookColumn>
-        {/* <BookStar /> */}
+        <BookStar />
       </Book>
     </>
   )
