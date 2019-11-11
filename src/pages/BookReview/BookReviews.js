@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styled from '@emotion/styled'
-import BookStar from './BookScore'
+import BookHeart from './BookScore'
 import BookLineForBR from './BookLineForBR'
 
 //---------------------------------------------------------------------------------------------------------
@@ -32,9 +35,9 @@ const BookColumn = styled.div`
 `
 
 //書本圖片
-// const BookImage = styled.img`
-//   margin: 0 auto;
-// `
+const BookImage = styled.img`
+  margin: 0 auto;
+`
 
 //加入書櫃按鈕
 const BookCase = styled.button`
@@ -48,7 +51,7 @@ const BookCase = styled.button`
 `
 //書本資訊
 const BookInfo = styled.div`
-  width: 700px;
+  width: 750px;
 `
 
 //書本分數
@@ -62,7 +65,7 @@ const BookScoreTitle = styled.div`
 const BookScore = styled.div`
   display: flex;
   flex-direction: column;
-  font-size: 45px;
+  font-size: 50px;
   align-items: center;
 `
 //回復評論外框
@@ -93,7 +96,6 @@ const Submit = styled.button`
   height: 50px;
 `
 
-
 //------------------------------------------------------------------------------------------------------
 
 const List = () => {
@@ -103,7 +105,7 @@ const List = () => {
 
   //變數
   const [List, setList] = useState([])
-  const [score,setScore] = useState([])
+  const [score, setScore] = useState([])
   useEffect(() => {
     reviewList()
   }, [score])
@@ -116,25 +118,23 @@ const List = () => {
         let s = res.data.data[0]
         console.log(res.data)
         setList(res.data.data)
-        setScore(s.five_star +
-          s.four_star +
-          s.three_star +
-          s.two_star +
-          s.one_star ===
-          0 ||
-          Math.round(
-            ((s.five_star * 5 +
-              s.four_star * 4 +
-              s.three_star * 3 +
-              s.two_star * 2 +
-              s.one_star) /
-              (s.five_star +
-                s.four_star +
-                s.three_star +
-                s.two_star +
-                s.one_star)) *
-              10
-          ) / 10)
+        setScore(
+          s.five_star + s.four_star + s.three_star + s.two_star + s.one_star ===
+            0 ||
+            Math.round(
+              ((s.five_star * 5 +
+                s.four_star * 4 +
+                s.three_star * 3 +
+                s.two_star * 2 +
+                s.one_star) /
+                (s.five_star +
+                  s.four_star +
+                  s.three_star +
+                  s.two_star +
+                  s.one_star)) *
+                10
+            ) / 10
+        )
       })
       .catch(error => {
         console.log(error)
@@ -184,9 +184,8 @@ const List = () => {
               </BookRow>
               <BookLineForBR List={List} />
             </BookColumn>
-            <BookScore >
-              {score}
-               <BookStar score={score}/>
+            <BookScore>
+              <BookHeart urlParams={urlParams} />
             </BookScore>
           </Book>
         ))}

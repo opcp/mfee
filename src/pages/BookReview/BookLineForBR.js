@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   margin: {
     margin: theme.spacing(1.5),
     borderRadius: '20px',
-    width: '200px',
+    width: '180px',
   },
 }))
 

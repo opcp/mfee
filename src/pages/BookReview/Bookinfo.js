@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import styled from '@emotion/styled'
@@ -10,7 +13,8 @@ function Bookinfo() {
   const [bookInformation, setBookInformation] = useState([]) //書籍資料
   const [array, setArray] = useState(1) //排序方式
   const [categorys, setCategorys] = useState([])
-  const [cate, setCate] = useState()
+  const [page, getPage] = useState()
+  let pageNum = []
 
   const urlParams = window.location.search
 
@@ -83,9 +87,10 @@ function Bookinfo() {
 
   const bookInfo = e => {
     axios
-      .get(`http://localhost:5555/reviews/${urlParams}?&a=${array}`)
+      .get(`http://localhost:5555/reviews/${urlParams}?&a=${array}&p=1`)
       .then(res => {
         setBookInformation(res.data.rows)
+        getPage(Math.ceil(res.data.total / 10))
         console.log(res.data)
       })
       .catch(error => {
@@ -93,14 +98,9 @@ function Bookinfo() {
       })
   }
 
-  const goPage = e => {
-    let arr = '&a=' + e
-    let local = window.location.href
-    console.log(window.location)
-    // if(local)
-    window.location.href += arr
+  for (let i = 1; i <= page; i++) {
+    pageNum.push(<li className="paginationNum">{i}</li>)
   }
-
   return (
     <>
       <CategoryBar>
@@ -112,7 +112,7 @@ function Bookinfo() {
           </Link>
         ))}
       </CategoryBar>
-      {urlParams == '' || (
+      {urlParams === '' || (
         <OptionBar>
           <select
             onChange={e => {
@@ -165,10 +165,10 @@ function Bookinfo() {
           ))}
         </BookColumn>
         <BookColumn>
-          <BookScore/>
           <BookLine List={bookInformation} />
         </BookColumn>
       </Book>
+      <ul className="pagination">{pageNum}</ul>
     </>
   )
 }

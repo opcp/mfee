@@ -36,8 +36,8 @@ function Category() {
           </button>
         </Link>
       ))} */}
-      <Link to='/123'>
-      <button>123</button>
+      <Link to="/123">
+        <button>123</button>
       </Link>
     </>
   )
