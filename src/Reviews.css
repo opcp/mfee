@@ -42,7 +42,7 @@
   max-height: 100%;
   max-width: 100%;
   width: 150px;
-  height: 180px;
+  height: 174px;
   margin: 0 0 45px 0;
   border: 1px solid #ccc;
 }
@@ -65,3 +65,7 @@
 }
 
 /*  /list  進入單本書籍後 書評頁面 */
+
+.BookLineScoreFont {
+  font-size: 25px;
+}

@@ -1,22 +1,19 @@
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-unused-vars */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable jsx-a11y/alt-text */
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 import styled from '@emotion/styled'
 import axios from 'axios'
-import BookStar from './BookStar'
+import BookScore from './BookScore'
+import BookLine from './BookLine'
+import Category from './Category'
 import './Reviews.css'
 function Bookinfo() {
   const [bookInformation, setBookInformation] = useState([]) //書籍資料
   const [array, setArray] = useState(1) //排序方式
   const [categorys, setCategorys] = useState([])
-  const [cate, setC] = useState(1)
+  const [cate, setCate] = useState()
 
   const urlParams = window.location.search
 
-  console.log(array)
   // setCategorys(urlParams)
   //---------------------------------------------------------------------------
   const CategoryBar = styled.div`
@@ -48,8 +45,9 @@ function Bookinfo() {
   `
   //書本資訊
   const BookInfo = styled.div`
-    width: 850px;
-    margin: 0 0 40px 2rem;
+    width: 750px;
+    height: 180px;
+    margin: 0 2rem 45px 2rem;
     overflow: hidden;
     white-space: wrap;
     text-overflow: ellipsis;
@@ -58,17 +56,18 @@ function Bookinfo() {
     -webkit-box-orient: vertical;
   `
   //書本星數
-  // const BookStar = styled.div`
-  //   width: 350px;
-  //   height: 250px;
-  //   border: 1px solid #ccc;
-  // `
+  const BookScoreSet = styled.div`
+    width: 350px;
+    height: 250px;
+    margin: 100px auto;
+    border: 1px solid #ccc;
+  `
 
   //---------------------------------------------------------------------
   useEffect(() => {
     bookInfo()
     categoryBar()
-  }, [])
+  }, [urlParams, array])
 
   const categoryBar = () => {
     axios
@@ -76,7 +75,6 @@ function Bookinfo() {
       .then(res => {
         let data = res.data.data
         setCategorys(data)
-        setC(data.sid)
       })
       .catch(error => {
         console.log(error)
@@ -84,9 +82,8 @@ function Bookinfo() {
   }
 
   const bookInfo = e => {
-    setArray(e)
     axios
-      .get(`http://localhost:5555/reviews/`)
+      .get(`http://localhost:5555/reviews/${urlParams}?&a=${array}`)
       .then(res => {
         setBookInformation(res.data.rows)
         console.log(res.data)
@@ -96,39 +93,45 @@ function Bookinfo() {
       })
   }
 
-  // const goPage = s => {
-  //   window.location.href = 'http://localhost:3000/reviews/?' + category
-  // }
+  const goPage = e => {
+    let arr = '&a=' + e
+    let local = window.location.href
+    console.log(window.location)
+    // if(local)
+    window.location.href += arr
+  }
 
   return (
     <>
       <CategoryBar>
         {categorys.map((data, index) => (
-          <button value={data.sid} key={index} className="btn">
-            {data.name}
-          </button>
+          <Link to={'reviews?c=' + data.sid + '&'}>
+            <button value={data.sid} key={index} className="btn">
+              {data.name}
+            </button>
+          </Link>
         ))}
       </CategoryBar>
-      <OptionBar>
-        <select
-          onChange={e => {
-            bookInfo(e.target.value)
-          }}
-          value={array}
-          name="array"
-        >
-          <option value="1" selected>
-            討論度(高>低)
-          </option>
-          <option value="2">上市日期(新>舊)</option>
-          <option value="3">暢銷度</option>
-        </select>
-      </OptionBar>
+      {urlParams == '' || (
+        <OptionBar>
+          <select
+            onChange={e => {
+              setArray(e.target.value)
+            }}
+            value={array}
+            name="array"
+          >
+            <option value="1">討論度(高>低)</option>
+            <option value="2">上市日期(新>舊)</option>
+            <option value="3">暢銷度</option>
+          </select>
+        </OptionBar>
+      )}
       <Book>
         <BookColumn>
           {bookInformation.map((data, index) => (
             <BookImage>
-              <Link to={'/list/' + data.sid}>
+              <Link to={'/book_reviews/' + data.sid}>
                 <img
                   key={index}
                   className="img"
@@ -161,7 +164,10 @@ function Bookinfo() {
             </BookInfo>
           ))}
         </BookColumn>
-        <BookStar />
+        <BookColumn>
+          <BookScore/>
+          <BookLine List={bookInformation} />
+        </BookColumn>
       </Book>
     </>
   )

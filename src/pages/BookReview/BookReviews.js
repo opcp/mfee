@@ -1,20 +1,14 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable jsx-a11y/alt-text */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-restricted-globals */
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styled from '@emotion/styled'
-import './Reviews.css'
-import BookStar from './BookStar'
-import BookLine from './BookLine'
+import BookStar from './BookScore'
+import BookLineForBR from './BookLineForBR'
 
 //---------------------------------------------------------------------------------------------------------
 
 //主要內容外框
 const Main = styled.section`
-  margin: 0 auto;
+  margin: 40px auto 0 auto;
   width: 1200px;
 `
 
@@ -41,6 +35,7 @@ const BookColumn = styled.div`
 // const BookImage = styled.img`
 //   margin: 0 auto;
 // `
+
 //加入書櫃按鈕
 const BookCase = styled.button`
   margin: 0 auto;
@@ -57,20 +52,19 @@ const BookInfo = styled.div`
 `
 
 //書本分數
-const BookScore = styled.div`
+const BookScoreTitle = styled.div`
   display: flex;
   flex-direction: column;
   margin: 45px 0 0 0;
   font-size: 15px;
 `
-//書本星數
-// const BookStar = styled.div`
-//   display: flex;
-//   width: 250px;
-//   height: 250px;
-//   border: 1px solid #ccc;
-//   justify-content: center;
-// `
+//書本評分
+const BookScore = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 45px;
+  align-items: center;
+`
 //回復評論外框
 const Review = styled.section`
   width: 1200px;
@@ -99,26 +93,48 @@ const Submit = styled.button`
   height: 50px;
 `
 
+
 //------------------------------------------------------------------------------------------------------
 
 const List = () => {
   //從nodejs拿取資料的sid值
-  const urlParams = window.location.pathname.replace('/list/', '')
+  const urlParams = window.location.pathname.replace('/book_reviews/', '')
   console.log(urlParams)
+
   //變數
   const [List, setList] = useState([])
-
+  const [score,setScore] = useState([])
   useEffect(() => {
     reviewList()
-  }, [])
+  }, [score])
 
   //書評分頁資料ajax
   const reviewList = () => {
     axios
-      .get(`http://localhost:5555/list/${urlParams}`)
+      .get(`http://localhost:5555/book_reviews/${urlParams}`)
       .then(res => {
+        let s = res.data.data[0]
         console.log(res.data)
         setList(res.data.data)
+        setScore(s.five_star +
+          s.four_star +
+          s.three_star +
+          s.two_star +
+          s.one_star ===
+          0 ||
+          Math.round(
+            ((s.five_star * 5 +
+              s.four_star * 4 +
+              s.three_star * 3 +
+              s.two_star * 2 +
+              s.one_star) /
+              (s.five_star +
+                s.four_star +
+                s.three_star +
+                s.two_star +
+                s.one_star)) *
+              10
+          ) / 10)
       })
       .catch(error => {
         console.log(error)
@@ -127,8 +143,8 @@ const List = () => {
   return (
     <>
       <Main>
-        {List.map((data, index) => (
-          <Book key={index}>
+        {List.map(data => (
+          <Book key={data.sid}>
             <BookColumn>
               <img
                 className="list_img"
@@ -154,22 +170,27 @@ const List = () => {
                 </div>
               </BookInfo>
             </BookColumn>
-            <BookScore>
+            <BookScoreTitle>
               <span>{'5'}</span>
               <span>{'4'}</span>
               <span>{'3'}</span>
               <span>{'2'}</span>
               <span>{'1'}</span>
-            </BookScore>
+            </BookScoreTitle>
             <BookColumn>
               <BookRow>
                 <BookCase>加入書櫃</BookCase>
                 <BookCase>立即購買</BookCase>
               </BookRow>
-              <BookLine />
+              <BookLineForBR List={List} />
             </BookColumn>
+            <BookScore >
+              {score}
+               <BookStar score={score}/>
+            </BookScore>
           </Book>
         ))}
+
         <Review>
           <h3>發表評論</h3>
           <Member />
